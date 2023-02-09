@@ -1,8 +1,9 @@
 plugins {
-    id "net.serenity-bdd.serenity-gradle-plugin" version "3.5.1"
+    id "net.serenity-bdd.serenity-gradle-plugin" version "3.6.7"
     id 'java'
     id 'eclipse'
     id 'idea'
+    id "org.gradle.test-retry" version "1.5.1"
 }
 
 defaultTasks 'clean','test','aggregate'
@@ -38,6 +39,14 @@ test {
     useJUnitPlatform()
     testLogging.showStandardStreams = true
     systemProperties System.getProperties()
+
+    retry {
+        maxRetries = 2
+        maxFailures = 20
+        failOnPassedAfterRetry = true
+    }
+
+    reports.junitXml.mergeReruns=true
 }
 
 gradle.startParameter.continueOnFailure = true
